@@ -1,0 +1,41 @@
+[
+    {
+        "name": "R",
+        "distribution": {
+            "Yes": [{"conditions": {}, "probability": 0.5}],
+            "No": [{"conditions": {}, "probability": 0.5}]
+        }
+    },
+    {
+        "name": "S",
+        "parents": ["R"],
+        "distribution": {
+            "Yes" : [
+                {"conditions": {"R": "Yes"}, "probability": 0.05},
+                {"conditions": {"R": "No"}, "probability": 0.8}
+            ],
+            "No": [
+                {"conditions": {"R": "Yes"}, "probability": 0.95},
+                {"conditions": {"R": "No"}, "probability": 0.2}
+            ]
+        }
+    },
+    {
+        "name": "W",
+        "parents": ["R", "S"],
+        "distribution": {
+            "Yes": [
+                {"conditions": {"R": "Yes", "S": "Yes"}, "probability": 0.99},
+                {"conditions": {"R": "Yes", "S": "No"}, "probability": 0.95},
+                {"conditions": {"R": "No", "S": "Yes"}, "probability": 0.95},
+                {"conditions": {"R": "No", "S": "No"}, "probability": 0.05}
+            ],
+            "No": [
+                {"conditions": {"R": "Yes", "S": "Yes"}, "probability": 0.01},
+                {"conditions": {"R": "Yes", "S": "No"}, "probability": 0.05},
+                {"conditions": {"R": "No", "S": "Yes"}, "probability": 0.05},
+                {"conditions": {"R": "No", "S": "No"}, "probability": 0.95}
+            ]
+        }
+    }
+]

@@ -1,0 +1,41 @@
+[
+    {
+        "name": "Rained",
+        "distribution": {
+            "Yes": [{"conditions": {}, "probability": 0.5}],
+            "No": [{"conditions": {}, "probability": 0.5}]
+        }
+    },
+    {
+        "name": "Sprinkler",
+        "parents": ["Rained"],
+        "distribution": {
+            "Yes" : [
+                {"conditions": {"Rained": "Yes"}, "probability": 0.05},
+                {"conditions": {"Rained": "No"}, "probability": 0.8}
+            ],
+            "No": [
+                {"conditions": {"Rained": "Yes"}, "probability": 0.95},
+                {"conditions": {"Rained": "No"}, "probability": 0.2}
+            ]
+        }
+    },
+    {
+        "name": "WetGrass",
+        "parents": ["Rained", "Sprinkler"],
+        "distribution": {
+            "Yes": [
+                {"conditions": {"Rained": "Yes", "Sprinkler": "Yes"}, "probability": 0.99},
+                {"conditions": {"Rained": "Yes", "Sprinkler": "No"}, "probability": 0.95},
+                {"conditions": {"Rained": "No", "Sprinkler": "Yes"}, "probability": 0.95},
+                {"conditions": {"Rained": "No", "Sprinkler": "No"}, "probability": 0.05}
+            ],
+            "No": [
+                {"conditions": {"Rained": "Yes", "Sprinkler": "Yes"}, "probability": 0.01},
+                {"conditions": {"Rained": "Yes", "Sprinkler": "No"}, "probability": 0.05},
+                {"conditions": {"Rained": "No", "Sprinkler": "Yes"}, "probability": 0.05},
+                {"conditions": {"Rained": "No", "Sprinkler": "No"}, "probability": 0.95}
+            ]
+        }
+    }
+]
