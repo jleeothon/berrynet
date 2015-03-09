@@ -3,7 +3,7 @@ import os
 from operator import methodcaller
 from operator import attrgetter
 from functools import reduce
-
+from itertools import product
 
 __all__ = [
     "ConditionalProbabilitySet",
@@ -104,11 +104,35 @@ class ConditionalProbabilitySet(set):
     def add(self, item):
         super().add(item)
 
+    def __repr__(self):
+        return "[%s]" % ",".join(map(repr, self))
+
     def verbose(self):
         s = ""
         for cp in self:
-            s += "        %s\n" % cp.verbose()
+            s += "%s\n" % cp.verbose()
         return s
+
+    def check_sanity(self):
+        expected_parentvalues = []
+        for p in self.node.parents.values():
+            values = []
+            for v in p.values:
+                values.append({p.name: v})
+            expected_parentvalues.append(values)
+        _eventset = [p for p in product(*expected_parentvalues)]
+        def combinemap(x, y):
+            x.update(y)
+            return x
+        _eventset = [reduce(combinemap, c, dict()) for c in _eventset]
+        for event in map(attrgetter("events"), self):
+            event = event.dict()
+            assert event in _eventset, ("%s not found in the "
+                "expected conditional distributions for %s=%s: %s" % (
+                    event, self.node.name, self.node_value, _eventset
+                    ))
+            _eventset.remove(event)
+        assert _eventset == [], "pending conditions found: %s" % _eventset
 
 
 class ConditionalProbability(object):
@@ -127,7 +151,12 @@ class ConditionalProbability(object):
         self.probability = probability
 
     def _setitem__(self, key, value):
-        #if not isinstance()
+        if not isinstance(key, EventSet):
+            raise TypeError("Key expected EventSet")
+        if not isinstance(value, (int, float)):
+            raise TypeError("Value expected number")
+        elif value < 0 or value > 1:
+            raise Exception("%d is not between 0 and 1" % value)
         super().__setitem__(key, value)
 
     def verbose(self):
@@ -136,6 +165,9 @@ class ConditionalProbability(object):
             self.node_value,
             self.events.verbose(),
             self.probability)
+
+    def __repr__(self):
+        return repr(self.events)
 
 
 class EventSet(dict):
@@ -166,3 +198,9 @@ class EventSet(dict):
         s += " & ".join([("%s=%s" % (k, v)) for k, v in self.items()])
         s += "}"
         return s
+
+    def __repr__(self):
+        return self.verbose()
+
+    def dict(self):
+        return {k.name: v for k, v in self.items()}

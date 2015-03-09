@@ -24,7 +24,6 @@ def load_network(network, filename):
                 raise Exception("Node \"%s\" has no distribution" % name)
             for value in distribution:
                 node.values.add(value)
-                # node.distribution.declare(value)
         else:
             raise Exception("Node repeated: %s" % name)
 
@@ -42,10 +41,7 @@ def load_network(network, filename):
         jDistribution = jNode["distribution"]
         if not isinstance(jDistribution, dict):
             raise TypeError("\"distribution\" in \"%s\"must be an object" % node.name)
-        # print("jDistribution", jDistribution)
         for jValue, jCps in jDistribution.items():
-            # print("jValue", jValue)
-            # print("jCps", jCps)
             if not isinstance(jCps, list):
                 raise TypeError("The set of conditional probabilities"
                     "for \"%s\"=>\"%s\" must be a list" % node.name, jValue)
