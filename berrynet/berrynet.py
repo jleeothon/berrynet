@@ -26,6 +26,9 @@ class Network(object):
     def verbose(self):
         return "\n".join(map(methodcaller("verbose"), self.nodes.values()))
 
+    def query(self, query_node, **evidences):
+        pass
+
 
 class Node(object):
 
@@ -132,7 +135,7 @@ class ConditionalProbabilitySet(set):
                     event, self.node.name, self.node_value, _eventset
                     ))
             _eventset.remove(event)
-        assert _eventset == [], "pending conditions found: %s" % _eventset
+        assert _eventset == [], "pending events found: %s" % _eventset
 
 
 class ConditionalProbability(object):

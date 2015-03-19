@@ -18,3 +18,26 @@ class TestParser(unittest.TestCase):
             for v, cps in node.distribution.items():
                 cps.check_sanity()
 
+    def test_marginal_probability_Rained(self):
+        berrynet.load_network(self.network, "./tests/rain.json")
+        solver = berrynet.NaiveSolver(self.network)
+        p = solver.marginal_probability(Rained="Yes")
+        print("P(Rained=Yes) =", p)
+        p = solver.marginal_probability(Rained="No")
+        print("P(Rained=No) =", p)
+
+    def test_marginal_probability_WetGrass_yes(self):
+        berrynet.load_network(self.network, "./tests/rain.json")
+        solver = berrynet.NaiveSolver(self.network)
+        p = solver.marginal_probability(WetGrass="Yes")
+        print("P(WetGrass=Yes) =", p)
+        p = solver.marginal_probability(WetGrass="No")
+        print("P(WetGrass=No) =", p)
+
+    def test_marginal_probability_Sprinkler_yes(self):
+        berrynet.load_network(self.network, "./tests/rain.json")
+        solver = berrynet.NaiveSolver(self.network)
+        p = solver.marginal_probability(Sprinkler="Yes")
+        print("P(Sprinkler=Yes) =", p)
+        p = solver.marginal_probability(Sprinkler="No")
+        print("P(Sprinkler=No) =", p)
